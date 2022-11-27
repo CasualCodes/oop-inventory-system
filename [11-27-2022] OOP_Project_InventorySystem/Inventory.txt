@@ -1,0 +1,5 @@
+0001,Popsicle,850,80.0,120.0,V
+2002,Christmas Tree Ni Mama,52,8000.0,10000.0,NV
+1258,Ukulele,97,1500.0,3560.0,NV
+9898,Personal Laptop,210,90000.0,110500.0,NV
+2002,Naulit Na Item,283,142.0,19248.0,V
