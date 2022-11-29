@@ -41,14 +41,24 @@ public class Main_Frame extends javax.swing.JFrame {
     DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
     DefaultTableCellRenderer leftRenderer = new DefaultTableCellRenderer();
     
-    // --------------------------- Global Variables - ArrayLists ---------------------------
+    // --------------------------- Global Variables - ArrayLists [INVENTORY] ---------------------------
     ArrayList<String> IDInventory = new ArrayList<>();
     ArrayList<String> nameInventory = new ArrayList<>();
     ArrayList<Integer> stockInventory = new ArrayList<>();
     ArrayList<Double> originalPriceInventory = new ArrayList<>();
     ArrayList<Double> salePriceInventory = new ArrayList<>();
     ArrayList<String> isVatableInventory = new ArrayList<>();
-    // --------------------------- Global Variables - ArrayLists ---------------------------
+    // --------------------------- Global Variables - ArrayLists [INVENTORY] ---------------------------
+    
+    // --------------------------- Global Variables - ArrayLists [HISTORY] ---------------------------
+    ArrayList<String> IDHistory = new ArrayList<>();
+    ArrayList<String> nameHistory = new ArrayList<>();
+    ArrayList<Integer> quantityHistory = new ArrayList<>();
+    ArrayList<Double> originalPriceHistory = new ArrayList<>();
+    ArrayList<Double> salePriceHistory = new ArrayList<>();
+    ArrayList<Double> subTotalHistory = new ArrayList<>();
+    ArrayList<String> isVatableHistory = new ArrayList<>();
+    // --------------------------- Global Variables - ArrayLists [HISTORY] ---------------------------
     
     // ------------- Global Variables - ArrayLists <-> TxtFile <-> ArrayLists --------------
     String filePath = "";
@@ -120,6 +130,9 @@ public class Main_Frame extends javax.swing.JFrame {
         centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
         rightRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
         leftRenderer.setHorizontalAlignment(SwingConstants.LEFT);
+        
+        // Start of the program - Defaults
+        Main_Add_Btn.setEnabled(false);
         
         // ------------------------ READ FILE (Inventory.txt) -> ArrayList -> System ------------------------
         try {
@@ -425,6 +438,11 @@ public class Main_Frame extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel5.setText("QUANTITY");
 
+        Main_itmQuantity_TxtField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Main_itmQuantity_TxtFieldActionPerformed(evt);
+            }
+        });
         Main_itmQuantity_TxtField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 Main_itmQuantity_TxtFieldKeyPressed(evt);
@@ -451,7 +469,7 @@ public class Main_Frame extends javax.swing.JFrame {
 
         jLabel7.setText("Available Stocks:");
 
-        Main_availableStock_Indicator.setText("10");
+        Main_availableStock_Indicator.setText("0");
 
         javax.swing.GroupLayout Main_inputPanelLayout = new javax.swing.GroupLayout(Main_inputPanel);
         Main_inputPanel.setLayout(Main_inputPanelLayout);
@@ -565,7 +583,7 @@ public class Main_Frame extends javax.swing.JFrame {
             Main_cartViewer_Table.getColumnModel().getColumn(6).setResizable(false);
         }
         Main_cartViewer_Table.getTableHeader().setUI(null);
-        hideColumn(0);
+        // hideColumn(0);
         hideColumn(3);
         hideColumn(4);
         hideColumn(6);
@@ -908,8 +926,25 @@ public class Main_Frame extends javax.swing.JFrame {
         jLabel14.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel14.setText("ITEM ID");
 
+        Inventory_itmID_TxtField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Inventory_itmID_TxtFieldActionPerformed(evt);
+            }
+        });
+
         jLabel30.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel30.setText("ITEM NAME");
+
+        Inventory_itmName_TxtField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Inventory_itmName_TxtFieldActionPerformed(evt);
+            }
+        });
+        Inventory_itmName_TxtField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                Inventory_itmName_TxtFieldKeyReleased(evt);
+            }
+        });
 
         jLabel33.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel33.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -1077,6 +1112,11 @@ public class Main_Frame extends javax.swing.JFrame {
         jLabel38.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         jLabel38.setText("Search");
 
+        Inventory_search_TxtField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Inventory_search_TxtFieldActionPerformed(evt);
+            }
+        });
         Inventory_search_TxtField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 Inventory_search_TxtFieldKeyReleased(evt);
@@ -1549,7 +1589,21 @@ public class Main_Frame extends javax.swing.JFrame {
     
     private void Main_itmID_TxtFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Main_itmID_TxtFieldKeyReleased
         
-        
+        if(IDInventory.contains(Main_itmID_TxtField.getText())) {
+            
+            int itemIDIndex = IDInventory.indexOf(Main_itmID_TxtField.getText());
+            
+            Main_itmName_TxtField.setText(nameInventory.get(itemIDIndex));
+            Main_itmPrice_TxtField.setText("" + originalPriceInventory.get(itemIDIndex));
+            Main_availableStock_Indicator.setText("" + stockInventory.get(itemIDIndex));
+            
+        } else {
+            
+            Main_itmName_TxtField.setText("");
+            Main_itmPrice_TxtField.setText("");
+            Main_availableStock_Indicator.setText("0");
+            
+        }
         
     }//GEN-LAST:event_Main_itmID_TxtFieldKeyReleased
 
@@ -1572,60 +1626,83 @@ public class Main_Frame extends javax.swing.JFrame {
         
         //CHECK IF THERE IS SUFFICIENT STOCK OF THE ITEM
         
-        if(Main_itmQuantity_TxtField.getText().isEmpty()){
+        // To make sure first that the item is available. - ITEMSTOCK & ITEMNAME
+        if(!Main_itmQuantity_TxtField.getText().isEmpty() && !Main_itmName_TxtField.getText().isEmpty()){
             
-        }else{
-            int input = Integer.parseInt(Main_itmQuantity_TxtField.getText());
-            int currSupply = Integer.parseInt(Main_availableStock_Indicator.getText());
+            int stockToBuyInput = Integer.parseInt(Main_itmQuantity_TxtField.getText());
+            int currentStockOfItem = Integer.parseInt(Main_availableStock_Indicator.getText());
         
-            if(currSupply < input){
+            if(currentStockOfItem < stockToBuyInput){
                 Main_insufficientStock_Indicator.setVisible(true);
                 Main_Add_Btn.setEnabled(false);
             }else{
                 Main_insufficientStock_Indicator.setVisible(false);
                 Main_Add_Btn.setEnabled(true);
             }
+            
         }   
+        
+        // If Main_itmQuantity_TxtField is empty, Main_Add_Button will be disabled.
+        if(Main_itmQuantity_TxtField.getText().trim().length() == 0) {
+            Main_Add_Btn.setEnabled(false);
+        }
+        
     }//GEN-LAST:event_Main_itmQuantity_TxtFieldKeyReleased
 
     private void Main_Add_BtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Main_Add_BtnActionPerformed
                
-        /*
-    NOTES;
-        Main_CartViewer_Table = Col[0] = ID                 (HIDDEN)
-                                Col[1] = NAME
-                                Col[2] = QUANTITY
-                                Col[3] = ORIGINAL PRICE     (HIDDEN)
-                                Col[4] = SALES PRICE        (HIDDEN)
-                                Col[5] = SUB TOTAL
-                                Col[6] = VAT                (HIDDEN)
-    */
-        
-        //ADD ITEM TO THE CART
-        
-        
-        //TEMP VALUES
-            String vat = "V";
-            double origPrice = 10.00;
-        
-        if(Main_itmID_TxtField.getText().isEmpty() || Main_itmName_TxtField.getText().isEmpty() 
-                || Main_itmPrice_TxtField.getText().isEmpty() || Main_itmQuantity_TxtField.getText().isEmpty()){
+        if(!Main_itmID_TxtField.getText().isEmpty()         &&
+           !Main_itmName_TxtField.getText().isEmpty()       && 
+           !Main_itmPrice_TxtField.getText().isEmpty()      && 
+           !Main_itmQuantity_TxtField.getText().isEmpty()   ){
             
-        }else{
-            
-            mainTabItm.setItmID(Main_itmID_TxtField.getText());
-            mainTabItm.setItmName(Main_itmName_TxtField.getText());
-            mainTabItm.setItmQty(Integer.parseInt(Main_itmQuantity_TxtField.getText()));
-            mainTabItm.setItmPrice(Double.parseDouble(Main_itmPrice_TxtField.getText()));
-            mainTabItm.setVatIndicator(vat);
-            mainTabItm.setOrigPrice(origPrice);
-        
-            mainCart.addRow(new Object[]{mainTabItm.getItmID(), mainTabItm.getItmName(), mainTabItm.getItmQty(), mainTabItm.getOrigPrice(),
-                                            mainTabItm.getItmPrice(), mainTabItm.getItmSubTotal(), mainTabItm.getVat()});
-            
-            Main_cartTotal_txt.setText(Double.toString(cartTotal())); //JUST TEMPORARY
-            
-            clearMainTab();
+                // GETTING INDEX - To Use for Accessing Data From ArrayList [INVENTORY].
+                // Used For      - Inventory [Database]
+                int indexForInventoryArrayList = IDInventory.indexOf(Main_itmID_TxtField.getText());
+
+                // COMPUTATIONS
+                double  originalPriceTotal  = originalPriceInventory.get(indexForInventoryArrayList);
+                double  actualPriceTotal    = (originalPriceTotal * .50) + originalPriceTotal;
+                double  salesPriceTotal     = (actualPriceTotal * .12) + actualPriceTotal;
+                int     quantityTotal       = Integer.parseInt(Main_itmQuantity_TxtField.getText());
+                double  subTotal            = salesPriceTotal * quantityTotal;
+
+                // SETTING VALUES - Insert To ArrayList [HISTORY].
+                IDHistory.add(IDInventory.get(indexForInventoryArrayList));
+                nameHistory.add(nameInventory.get(indexForInventoryArrayList));
+                quantityHistory.add(quantityTotal);
+                originalPriceHistory.add(originalPriceTotal);
+                salePriceHistory.add(salesPriceTotal);
+                subTotalHistory.add(subTotal);
+                isVatableHistory.add(isVatableInventory.get(indexForInventoryArrayList));
+                
+                // GETTING INDEX - To Use for Accessing Data From ArrayList [HISTORY].
+                // Used For      - History [Database]
+                int indexForHistoryArrayList = IDHistory.indexOf(Main_itmID_TxtField.getText());
+
+                mainCart.addRow(new Object[]{
+                                                IDHistory.get(indexForHistoryArrayList), 
+                                                nameHistory.get(indexForHistoryArrayList), 
+                                                quantityHistory.get(indexForHistoryArrayList), 
+                                                originalPriceHistory.get(indexForHistoryArrayList), 
+                                                salePriceHistory.get(indexForHistoryArrayList), 
+                                                subTotalHistory.get(indexForHistoryArrayList), 
+                                                isVatableHistory.get(indexForHistoryArrayList)
+                                            });
+
+                clearMainTab();
+                
+                // CHECK - Kung nakapasok sa History ArrayList lahat.
+                
+                for(int a = 0; a < IDHistory.size(); a++) {
+                    System.out.println(         IDHistory.get(a) + " " +  
+                                                nameHistory.get(a) + " " +  
+                                                quantityHistory.get(a) + " " +   
+                                                originalPriceHistory.get(a) + " " +  
+                                                salePriceHistory.get(a) + " " +  
+                                                subTotalHistory.get(a) + " " +  
+                                                isVatableHistory.get(a));
+                }
         }   
     }//GEN-LAST:event_Main_Add_BtnActionPerformed
 
@@ -1855,68 +1932,91 @@ public class Main_Frame extends javax.swing.JFrame {
            !Inventory_itmOrigPrice_TxtField.getText().isEmpty() && 
            !Inventory_itmSalePrice_TxtField.getText().isEmpty() ){
             
-           IDInventory.add(Inventory_itmID_TxtField.getText());
-           nameInventory.add(Inventory_itmName_TxtField.getText());
-           stockInventory.add(Integer.parseInt(Inventory_itmStock_TxtField.getText()));
-           originalPriceInventory.add(Double.parseDouble(Inventory_itmOrigPrice_TxtField.getText()));
-           salePriceInventory.add(Double.parseDouble(Inventory_itmSalePrice_TxtField.getText()));
-                
-           if(Inventory_Vat_Indicator.isSelected()) {
-                isVatableInventory.add("V");
-           } else {
-                isVatableInventory.add("NV");
+           if(!IDInventory.contains(Inventory_itmID_TxtField.getText())) {
+               
+                IDInventory.add(Inventory_itmID_TxtField.getText());
+                nameInventory.add(Inventory_itmName_TxtField.getText());
+                stockInventory.add(Integer.parseInt(Inventory_itmStock_TxtField.getText()));
+                originalPriceInventory.add(Double.parseDouble(Inventory_itmOrigPrice_TxtField.getText()));
+                salePriceInventory.add(Double.parseDouble(Inventory_itmSalePrice_TxtField.getText()));
+
+                if(Inventory_Vat_Indicator.isSelected()) {
+                     isVatableInventory.add("V");
+                } else {
+                     isVatableInventory.add("NV");
+                }
+
+                InsertArrayListToTxtFileToSystem();
+                defaultInventoryTabState();
+               
            }
-           
-           InsertArrayListToTxtFileToSystem();
-           defaultInventoryTabState();
 
          }
         
     }//GEN-LAST:event_Inventory_insert_BtnActionPerformed
    
     private void Inventory_remove_BtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Inventory_remove_BtnActionPerformed
+        
         int delRow = Inventory_stockViewer_Table.getSelectedRow();
         
         if(delRow >= 0){
+            
             inventory.removeRow(delRow);
+            
+            // ----------------------- Remove Data -> ArrayList -> TxtFile -> Inventory Table -----------------------
+            int itemIDIndexArray = IDInventory.indexOf(Inventory_itmID_TxtField.getText());
+            IDInventory.remove(itemIDIndexArray);
+            nameInventory.remove(itemIDIndexArray);
+            stockInventory.remove(itemIDIndexArray);
+            originalPriceInventory.remove(itemIDIndexArray);
+            salePriceInventory.remove(itemIDIndexArray);
+            isVatableInventory.remove(itemIDIndexArray);
+            // ----------------------- Remove Data -> ArrayList -> TxtFile -> Inventory Table -----------------------
+
+            InsertArrayListToTxtFileToSystem();
+            defaultInventoryTabState();
+            
         }
         
-        defaultInventoryTabState();
     }//GEN-LAST:event_Inventory_remove_BtnActionPerformed
 
+    int itemIDIndexArray = 0;
     private void Inventory_edit_BtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Inventory_edit_BtnActionPerformed
         
         if(!isInventoryEditable){
             
             isInventoryEditable = true;
             inventoryEditState();
+            
+            // ------------------------- SET DATA TO BE EDITED ON THE ELSE IF BLOCK -------------------------
+            itemIDIndexArray = IDInventory.indexOf(Inventory_itmID_TxtField.getText());
+            // ------------------------- SET DATA TO BE EDITED ON THE ELSE IF BLOCK -------------------------
         
         }else if(isInventoryEditable){
             
-            if(Inventory_itmID_TxtField.getText().isEmpty() || Inventory_itmName_TxtField.getText().isEmpty() || Inventory_itmOrigPrice_TxtField.getText().isEmpty() ||
-                Inventory_itmSalePrice_TxtField.getText().isEmpty() || Inventory_itmStock_TxtField.getText().isEmpty()){
-            
-            }else{
+            if(!Inventory_itmID_TxtField.getText().isEmpty()        && 
+               !Inventory_itmName_TxtField.getText().isEmpty()      && 
+               !Inventory_itmOrigPrice_TxtField.getText().isEmpty() &&
+               !Inventory_itmSalePrice_TxtField.getText().isEmpty() && 
+               !Inventory_itmStock_TxtField.getText().isEmpty()     ){
                 
-                int index = Inventory_stockViewer_Table.getSelectedRow();
+                // ------------------------- Edit Data -> ArrayList -> TxtFile -> Inventory Table -------------------------
+                IDInventory.set(itemIDIndexArray, Inventory_itmID_TxtField.getText());
+                nameInventory.set(itemIDIndexArray, Inventory_itmName_TxtField.getText());
+                stockInventory.set(itemIDIndexArray, Integer.parseInt(Inventory_itmStock_TxtField.getText()));
+                originalPriceInventory.set(itemIDIndexArray, Double.parseDouble(Inventory_itmOrigPrice_TxtField.getText()));
+                salePriceInventory.set(itemIDIndexArray, Double.parseDouble(Inventory_itmSalePrice_TxtField.getText()));
                 
-                inventoryTabItm.setItemID(Inventory_itmID_TxtField.getText());
-                inventoryTabItm.setItemName(Inventory_itmName_TxtField.getText());
-                inventoryTabItm.setItemOrigPrice(Double.parseDouble(Inventory_itmOrigPrice_TxtField.getText()));
-                inventoryTabItm.setItemSalePrice(Double.parseDouble(Inventory_itmSalePrice_TxtField.getText()));
-                inventoryTabItm.setItemStock(Integer.parseInt(Inventory_itmStock_TxtField.getText()));
-                boolean isVatable = Inventory_Vat_Indicator.isSelected();
+                if(Inventory_Vat_Indicator.isSelected()) {
+                    isVatableInventory.set(itemIDIndexArray, "V");
+                } else {
+                    isVatableInventory.set(itemIDIndexArray, "NV");
+                }
+                // ------------------------- Edit Data -> ArrayList -> TxtFile -> Inventory Table -------------------------
                 
-                inventory.setValueAt(inventoryTabItm.getItemID(), index, 0);
-                inventory.setValueAt(inventoryTabItm.getName(), index, 1);
-                inventory.setValueAt(inventoryTabItm.getItemStock(), index, 2);
-                inventory.setValueAt(inventoryTabItm.getOrigPrice(), index, 3);
-                inventory.setValueAt(inventoryTabItm.getSalePrice(), index, 4); 
-                inventory.setValueAt(inventoryTabItm.getVatIndicator(isVatable), index, 5); 
-                
-                isInventoryEditable = false;
-                
+                InsertArrayListToTxtFileToSystem();
                 defaultInventoryTabState();
+                isInventoryEditable = false;
                 
             }   
         }
@@ -1985,6 +2085,30 @@ public class Main_Frame extends javax.swing.JFrame {
     private void Inventory_itmStockAdder_TxtFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Inventory_itmStockAdder_TxtFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_Inventory_itmStockAdder_TxtFieldActionPerformed
+
+    private void Inventory_itmID_TxtFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Inventory_itmID_TxtFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Inventory_itmID_TxtFieldActionPerformed
+
+    private void Inventory_search_TxtFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Inventory_search_TxtFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Inventory_search_TxtFieldActionPerformed
+
+    private void Inventory_itmName_TxtFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Inventory_itmName_TxtFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Inventory_itmName_TxtFieldActionPerformed
+
+    private void Inventory_itmName_TxtFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Inventory_itmName_TxtFieldKeyReleased
+        
+        // Automatic Generate Code for Item ID - While typing name, a generated ITEM ID occurs.
+        
+        
+        
+    }//GEN-LAST:event_Inventory_itmName_TxtFieldKeyReleased
+
+    private void Main_itmQuantity_TxtFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Main_itmQuantity_TxtFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Main_itmQuantity_TxtFieldActionPerformed
 
 
     // - - - - - - - - - - - - OTHERS - - - - - - - - - - - - //
