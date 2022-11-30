@@ -547,7 +547,7 @@
                             </Property>
                           </Properties>
                           <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="Main_cartViewer_Table.getTableHeader().setUI(null);&#xa;// hideColumn(0);&#xa;hideColumn(3);&#xa;hideColumn(4);&#xa;hideColumn(6);"/>
+                            <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="Main_cartViewer_Table.getTableHeader().setUI(null);&#xa;hideColumn(0);&#xa;hideColumn(3);&#xa;hideColumn(4);&#xa;hideColumn(6);"/>
                           </AuxValues>
                         </Component>
                       </SubComponents>

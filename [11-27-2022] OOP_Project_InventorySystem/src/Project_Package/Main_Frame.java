@@ -60,6 +60,16 @@ public class Main_Frame extends javax.swing.JFrame {
     ArrayList<String> isVatableHistory = new ArrayList<>();
     // --------------------------- Global Variables - ArrayLists [HISTORY] ---------------------------
     
+    // --------------------------- Global Variables - ArrayLists [CART ITEMS] ---------------------------
+    ArrayList<String> IDCartItem = new ArrayList<>();
+    ArrayList<String> nameCartItem = new ArrayList<>();
+    ArrayList<Integer> quantityCartItem = new ArrayList<>();
+    ArrayList<Double> originalPriceCartItem = new ArrayList<>();
+    ArrayList<Double> salePriceCartItem = new ArrayList<>();
+    ArrayList<Double> subTotalCartItem = new ArrayList<>();
+    ArrayList<String> isVatableCartItem = new ArrayList<>();
+    // --------------------------- Global Variables - ArrayLists [CART ITEMS] ---------------------------
+    
     // ------------- Global Variables - ArrayLists <-> TxtFile <-> ArrayLists --------------
     String filePath = "";
     String theResult;
@@ -583,7 +593,7 @@ public class Main_Frame extends javax.swing.JFrame {
             Main_cartViewer_Table.getColumnModel().getColumn(6).setResizable(false);
         }
         Main_cartViewer_Table.getTableHeader().setUI(null);
-        // hideColumn(0);
+        hideColumn(0);
         hideColumn(3);
         hideColumn(4);
         hideColumn(6);
@@ -1643,7 +1653,8 @@ public class Main_Frame extends javax.swing.JFrame {
         }   
         
         // If Main_itmQuantity_TxtField is empty, Main_Add_Button will be disabled.
-        if(Main_itmQuantity_TxtField.getText().trim().length() == 0) {
+        if(Main_itmQuantity_TxtField.getText().trim().length() == 0 || 
+           Main_itmQuantity_TxtField.getText().trim().equals("0")) {
             Main_Add_Btn.setEnabled(false);
         }
         
@@ -1654,7 +1665,8 @@ public class Main_Frame extends javax.swing.JFrame {
         if(!Main_itmID_TxtField.getText().isEmpty()         &&
            !Main_itmName_TxtField.getText().isEmpty()       && 
            !Main_itmPrice_TxtField.getText().isEmpty()      && 
-           !Main_itmQuantity_TxtField.getText().isEmpty()   ){
+           !Main_itmQuantity_TxtField.getText().isEmpty()   &&
+           !Main_itmQuantity_TxtField.getText().equals("0") ){
             
                 // GETTING INDEX - To Use for Accessing Data From ArrayList [INVENTORY].
                 // Used For      - Inventory [Database]
@@ -1667,42 +1679,55 @@ public class Main_Frame extends javax.swing.JFrame {
                 int     quantityTotal       = Integer.parseInt(Main_itmQuantity_TxtField.getText());
                 double  subTotal            = salesPriceTotal * quantityTotal;
 
-                // SETTING VALUES - Insert To ArrayList [HISTORY].
-                IDHistory.add(IDInventory.get(indexForInventoryArrayList));
-                nameHistory.add(nameInventory.get(indexForInventoryArrayList));
-                quantityHistory.add(quantityTotal);
-                originalPriceHistory.add(originalPriceTotal);
-                salePriceHistory.add(salesPriceTotal);
-                subTotalHistory.add(subTotal);
-                isVatableHistory.add(isVatableInventory.get(indexForInventoryArrayList));
+                // SETTING VALUES - Insert To ArrayList [CART ITEM].
+                IDCartItem.add(IDInventory.get(indexForInventoryArrayList));
+                nameCartItem.add(nameInventory.get(indexForInventoryArrayList));
+                quantityCartItem.add(quantityTotal);
+                originalPriceCartItem.add(originalPriceTotal);
+                salePriceCartItem.add(salesPriceTotal);
+                subTotalCartItem.add(subTotal);
+                isVatableCartItem.add(isVatableInventory.get(indexForInventoryArrayList));
                 
-                // GETTING INDEX - To Use for Accessing Data From ArrayList [HISTORY].
-                // Used For      - History [Database]
-                int indexForHistoryArrayList = IDHistory.indexOf(Main_itmID_TxtField.getText());
+                // GETTING INDEX - To Use for Accessing Data From ArrayList [CART ITEM].
+                // Used For      - Cart Item [Database]
+                int indexForCartItemArrayList = mainCart.getRowCount();
 
                 mainCart.addRow(new Object[]{
-                                                IDHistory.get(indexForHistoryArrayList), 
-                                                nameHistory.get(indexForHistoryArrayList), 
-                                                quantityHistory.get(indexForHistoryArrayList), 
-                                                originalPriceHistory.get(indexForHistoryArrayList), 
-                                                salePriceHistory.get(indexForHistoryArrayList), 
-                                                subTotalHistory.get(indexForHistoryArrayList), 
-                                                isVatableHistory.get(indexForHistoryArrayList)
+                                                IDCartItem.get(indexForCartItemArrayList), 
+                                                nameCartItem.get(indexForCartItemArrayList), 
+                                                quantityCartItem.get(indexForCartItemArrayList), 
+                                                originalPriceCartItem.get(indexForCartItemArrayList), 
+                                                salePriceCartItem.get(indexForCartItemArrayList), 
+                                                subTotalCartItem.get(indexForCartItemArrayList), 
+                                                isVatableCartItem.get(indexForCartItemArrayList)
                                             });
 
                 clearMainTab();
+                Main_Add_Btn.setEnabled(false); // Disable ulit yung "ADD BUTTON" after adding.
                 
                 // CHECK - Kung nakapasok sa History ArrayList lahat.
                 
-                for(int a = 0; a < IDHistory.size(); a++) {
-                    System.out.println(         IDHistory.get(a) + " " +  
-                                                nameHistory.get(a) + " " +  
-                                                quantityHistory.get(a) + " " +   
-                                                originalPriceHistory.get(a) + " " +  
-                                                salePriceHistory.get(a) + " " +  
-                                                subTotalHistory.get(a) + " " +  
-                                                isVatableHistory.get(a));
+                    for(int a = 0; a < IDCartItem.size(); a++) {
+                    System.out.println(         IDCartItem.get(a) + " " +  
+                                                nameCartItem.get(a) + " " +  
+                                                quantityCartItem.get(a) + " " +   
+                                                originalPriceCartItem.get(a) + " " +  
+                                                salePriceCartItem.get(a) + " " +  
+                                                subTotalCartItem.get(a) + " " +  
+                                                isVatableCartItem.get(a));
                 }
+                System.out.println();
+                
+                // COMPUTATION - Subtract yung quantity na inadd ni user sa Database.
+                
+                stockInventory.set(indexForInventoryArrayList, stockInventory.get(indexForInventoryArrayList) - quantityTotal);
+                Main_availableStock_Indicator.setText("" + stockInventory.get(indexForInventoryArrayList));
+                
+                // Refresh Inventory System
+                InsertArrayListToTxtFileToSystem();
+                
+                // COMPUTATION - Subtract yung quantity na inadd ni user sa Database.
+                
         }   
     }//GEN-LAST:event_Main_Add_BtnActionPerformed
 
@@ -1713,10 +1738,35 @@ public class Main_Frame extends javax.swing.JFrame {
         int delRow = Main_cartViewer_Table.getSelectedRow();
         
         if(delRow >= 0){
+            
+            String IDNumberToBeDeleted = IDCartItem.get(delRow);                        // Kinuha ko ID Name/# ng nasa row na ma dedelete.
+            int indexForInventoryArrayList = IDInventory.indexOf(IDNumberToBeDeleted);  // Hinanap ko siya sa Inventory Database (ArrayList).
+            
+            // Ibalik yung quantity na nabawas and idagdag ulit sa inventory.
+            stockInventory.set(
+                                    indexForInventoryArrayList, 
+                                    stockInventory.get(indexForInventoryArrayList) + quantityCartItem.get(delRow)
+                              );
+            
+            // Refresh Inventory System
+            InsertArrayListToTxtFileToSystem();
+            
+            // Refresh Quantity Stock - Found At Main User Area
+            Main_availableStock_Indicator.setText("" + stockInventory.get(indexForInventoryArrayList));
+            
+            IDCartItem.remove(delRow);
+            nameCartItem.remove(delRow);
+            quantityCartItem.remove(delRow);
+            originalPriceCartItem.remove(delRow);
+            salePriceCartItem.remove(delRow);
+            subTotalCartItem.remove(delRow);
+            isVatableCartItem.remove(delRow);
+            
             mainCart.removeRow(delRow);
+            
         }
         
-        Main_cartTotal_txt.setText(Double.toString(cartTotal())); //JUST TEMPORARY
+        
     }//GEN-LAST:event_Main_remove_BtnActionPerformed
 
     private void Main_cancel_BtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Main_cancel_BtnActionPerformed
@@ -1758,6 +1808,25 @@ public class Main_Frame extends javax.swing.JFrame {
         if(cash < amountToPay){
             Main_InsufficientAmount_Indicator.setVisible(true);
         }else{
+            
+            // DITO YUNG CODE PAG SUFFICIENT PERA NI USER.
+            
+            /*
+                Game Plan:
+                [1] History Database   - Content nung nasa CART ITEM Database (ArrayList) is
+                                         mapapasok sa HISTORY Database (ArrayList) then to txt
+                                         file (History.txt).
+                [2] Cart Item Database - Delete lahat ng laman ng CART ITEM Database (ArrayList)
+                                         para magamit sa next na process. 
+                                       - Basically, everytime na successful na ang payment, pag
+                                         nakapasok na yung laman ng CART ITEM Database (ArrayList)
+                                         doon sa HISTORY Database (ArrayList) then to txt file
+                                         (History.txt), madedelete na din entire laman ng CART ITEM 
+                                         Database.
+            */
+            
+            // DITO YUNG CODE PAG SUFFICIENT PERA NI USER.
+            
             changeAmount = cash - amountToPay;
             //GO TO RECEIPT PAGE
             
