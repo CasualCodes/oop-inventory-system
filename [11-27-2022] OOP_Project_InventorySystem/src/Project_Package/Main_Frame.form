@@ -546,6 +546,9 @@
                               <TableHeader reorderingAllowed="false" resizingAllowed="false"/>
                             </Property>
                           </Properties>
+                          <Events>
+                            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="Main_cartViewer_TableMouseClicked"/>
+                          </Events>
                           <AuxValues>
                             <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="Main_cartViewer_Table.getTableHeader().setUI(null);&#xa;hideColumn(0);&#xa;hideColumn(3);&#xa;hideColumn(4);&#xa;hideColumn(6);"/>
                           </AuxValues>
@@ -576,6 +579,9 @@
                       <Events>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Main_remove_BtnActionPerformed"/>
                       </Events>
+                      <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="Main_remove_Btn.setEnabled(false);"/>
+                      </AuxValues>
                     </Component>
                     <Component class="javax.swing.JButton" name="Main_confirm_Btn">
                       <Properties>

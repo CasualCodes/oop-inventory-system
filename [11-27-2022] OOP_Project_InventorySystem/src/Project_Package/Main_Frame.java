@@ -582,6 +582,11 @@ public class Main_Frame extends javax.swing.JFrame {
         Main_cartViewer_Table.setOpaque(false);
         Main_cartViewer_Table.getTableHeader().setResizingAllowed(false);
         Main_cartViewer_Table.getTableHeader().setReorderingAllowed(false);
+        Main_cartViewer_Table.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                Main_cartViewer_TableMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(Main_cartViewer_Table);
         if (Main_cartViewer_Table.getColumnModel().getColumnCount() > 0) {
             Main_cartViewer_Table.getColumnModel().getColumn(0).setResizable(false);
@@ -605,6 +610,7 @@ public class Main_Frame extends javax.swing.JFrame {
         Main_cartTotal_txt.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         Main_cartTotal_txt.setText("0.0");
 
+        Main_remove_Btn.setEnabled(false);
         Main_remove_Btn.setText("REMOVE");
         Main_remove_Btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1891,11 +1897,21 @@ public class Main_Frame extends javax.swing.JFrame {
         Inventory_itmName_TxtField.setText(inventory.getValueAt(index, 1).toString());
         Inventory_itmStock_TxtField.setText(inventory.getValueAt(index, 2).toString());
         Inventory_itmOrigPrice_TxtField.setText(inventory.getValueAt(index, 3).toString());
-        Inventory_itmSalePrice_TxtField.setText(inventory.getValueAt(index, 4).toString());
         
-        if(inventory.getValueAt(index, 5).toString() == "V"){
+        double indexOfSales = Double.parseDouble(inventory.getValueAt(index, 4).toString());
+        double tolerance = 0.01;
+        
+        if(inventory.getValueAt(index, 5).toString().equals("V")){
+            double newResult = indexOfSales / 1.12;
+            
+            if (Math.abs(Math.round(newResult) - newResult) < tolerance) {
+                newResult = Math.round(newResult);
+            }
+            Inventory_itmSalePrice_TxtField.setText("" + newResult);
+            
             Inventory_Vat_Indicator.setSelected(true);
         }else{
+            Inventory_itmSalePrice_TxtField.setText(inventory.getValueAt(index, 4).toString());
             Inventory_Vat_Indicator.setSelected(false);
         }
         
@@ -2003,18 +2019,25 @@ public class Main_Frame extends javax.swing.JFrame {
             
            if(!IDInventory.contains(Inventory_itmID_TxtField.getText())) {
                
+                double salesPrice = Double.parseDouble(Inventory_itmSalePrice_TxtField.getText());
+               
                 IDInventory.add(Inventory_itmID_TxtField.getText());
                 nameInventory.add(Inventory_itmName_TxtField.getText());
                 stockInventory.add(Integer.parseInt(Inventory_itmStock_TxtField.getText()));
                 originalPriceInventory.add(Double.parseDouble(Inventory_itmOrigPrice_TxtField.getText()));
-                salePriceInventory.add(Double.parseDouble(Inventory_itmSalePrice_TxtField.getText()));
 
                 if(Inventory_Vat_Indicator.isSelected()) {
+                     
+                     salesPrice = salesPrice + (salesPrice * .12);
+                    
+                     salePriceInventory.add(salesPrice);
                      isVatableInventory.add("V");
                 } else {
+                    
                      isVatableInventory.add("NV");
                 }
 
+                salePriceInventory.add(salesPrice);
                 InsertArrayListToTxtFileToSystem();
                 defaultInventoryTabState();
                
@@ -2076,7 +2099,13 @@ public class Main_Frame extends javax.swing.JFrame {
                 originalPriceInventory.set(itemIDIndexArray, Double.parseDouble(Inventory_itmOrigPrice_TxtField.getText()));
                 salePriceInventory.set(itemIDIndexArray, Double.parseDouble(Inventory_itmSalePrice_TxtField.getText()));
                 
-                if(Inventory_Vat_Indicator.isSelected()) {
+                if(Inventory_Vat_Indicator.isSelected()) {  // From Non-Vatable to Vatable (NV -> V)
+        
+                    double salesContent = Double.parseDouble(Inventory_itmSalePrice_TxtField.getText());
+                    double newResult = salesContent + (salesContent * .12);
+                    
+                    salePriceInventory.set(itemIDIndexArray, newResult);
+                     
                     isVatableInventory.set(itemIDIndexArray, "V");
                 } else {
                     isVatableInventory.set(itemIDIndexArray, "NV");
@@ -2178,6 +2207,10 @@ public class Main_Frame extends javax.swing.JFrame {
     private void Main_itmQuantity_TxtFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Main_itmQuantity_TxtFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_Main_itmQuantity_TxtFieldActionPerformed
+
+    private void Main_cartViewer_TableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Main_cartViewer_TableMouseClicked
+        Main_remove_Btn.setEnabled(true);
+    }//GEN-LAST:event_Main_cartViewer_TableMouseClicked
 
 
     // - - - - - - - - - - - - OTHERS - - - - - - - - - - - - //
