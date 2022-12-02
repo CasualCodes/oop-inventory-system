@@ -16,13 +16,14 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
+import java.time.LocalDate;
 
 /**
  *
  * @author janwi
  */
 public class Main_Frame extends javax.swing.JFrame {
-
+    
     CardLayout cardProgramTabs;
     CardLayout cardMainTab;
     CardLayout cardSalesTab;
@@ -51,6 +52,7 @@ public class Main_Frame extends javax.swing.JFrame {
     // --------------------------- Global Variables - ArrayLists [INVENTORY] ---------------------------
     
     // --------------------------- Global Variables - ArrayLists [HISTORY] ---------------------------
+    ArrayList<String> dateHistory = new ArrayList<>();
     ArrayList<String> IDHistory = new ArrayList<>();
     ArrayList<String> nameHistory = new ArrayList<>();
     ArrayList<Integer> quantityHistory = new ArrayList<>();
@@ -58,9 +60,11 @@ public class Main_Frame extends javax.swing.JFrame {
     ArrayList<Double> salePriceHistory = new ArrayList<>();
     ArrayList<Double> subTotalHistory = new ArrayList<>();
     ArrayList<String> isVatableHistory = new ArrayList<>();
+    ArrayList<Double> profitHistory = new ArrayList<>();
     // --------------------------- Global Variables - ArrayLists [HISTORY] ---------------------------
     
     // --------------------------- Global Variables - ArrayLists [CART ITEMS] ---------------------------
+    ArrayList<String> dateCartItem = new ArrayList<>();
     ArrayList<String> IDCartItem = new ArrayList<>();
     ArrayList<String> nameCartItem = new ArrayList<>();
     ArrayList<Integer> quantityCartItem = new ArrayList<>();
@@ -69,6 +73,11 @@ public class Main_Frame extends javax.swing.JFrame {
     ArrayList<Double> subTotalCartItem = new ArrayList<>();
     ArrayList<String> isVatableCartItem = new ArrayList<>();
     // --------------------------- Global Variables - ArrayLists [CART ITEMS] ---------------------------
+    
+    // --------------------------- Global Variables - ArrayLists [REFERENCE] ---------------------------
+    ArrayList<String> referenceNumbers = new ArrayList<>();
+    ArrayList<String> referenceNumbersDate = new ArrayList<>();
+    // --------------------------- Global Variables - ArrayLists [REFERENCE] ---------------------------
     
     // ------------- Global Variables - ArrayLists <-> TxtFile <-> ArrayLists --------------
     String filePath = "";
@@ -94,7 +103,7 @@ public class Main_Frame extends javax.swing.JFrame {
         return goBuffer.toString();
     }
     
-    // READING - TxtFile -> ArrayList
+    // READING - TxtFile (Invetory.txt) -> Inventory (ARRAYLIST)
     public void readFileOnceSystemIsOpened() throws Exception {
         
         File getFile = new File("Inventory.txt");
@@ -113,10 +122,29 @@ public class Main_Frame extends javax.swing.JFrame {
             
         }
         
-        for(int a = 0; a < IDInventory.size(); a++) {   // To check if napapasok yung database sa ArrayList ulit.
+    }
+    
+    // READING - TxtFile (History.txt) -> History (ARRAYLIST)
+    // Code here for reading.
+    
+    public void loadTxtFileToArrayListToSalesHistory() throws Exception {
+        
+        File getFile = new File("History.txt");
+        Scanner scanFile = new Scanner(getFile);
+        
+        while(scanFile.hasNextLine()) {
             
-            System.out.println(IDInventory.get(a) + "," + nameInventory.get(a) + "," + stockInventory.get(a) + "," + 
-                               originalPriceInventory.get(a) + "," + salePriceInventory.get(a));
+            String[] textPerLine = scanFile.nextLine().split(",");
+            
+            dateHistory.add(textPerLine[0]);
+            IDHistory.add(textPerLine[1]);
+            nameHistory.add(textPerLine[2]);
+            quantityHistory.add(Integer.parseInt(textPerLine[3]));
+            originalPriceHistory.add(Double.parseDouble(textPerLine[4]));
+            salePriceHistory.add(Double.parseDouble(textPerLine[5]));
+            subTotalHistory.add(Double.parseDouble(textPerLine[6]));
+            isVatableHistory.add(textPerLine[7]);
+            profitHistory.add(Double.parseDouble(textPerLine[8]));
             
         }
         
@@ -148,7 +176,12 @@ public class Main_Frame extends javax.swing.JFrame {
         try {
             readFileOnceSystemIsOpened();
         } catch(Exception e) {}
-        inventorySystemRefresherOnceSystemIsOpened();
+            inventorySystemRefresherOnceSystemIsOpened();
+        try {
+            loadTxtFileToArrayListToSalesHistory();
+        } catch(Exception e) {}
+            salesHistorySystemRefresherOnceSystemIsOpened();
+            
         // ------------------------ READ FILE (Inventory.txt) -> ArrayList -> System ------------------------
         
         defaultInventoryTabState();
@@ -165,6 +198,26 @@ public class Main_Frame extends javax.swing.JFrame {
                                             originalPriceInventory.get(a), 
                                             salePriceInventory.get(a),
                                             isVatableInventory.get(a)
+                                         });
+                    
+        }
+        
+    }
+    
+    public void salesHistorySystemRefresherOnceSystemIsOpened() {
+        
+        for(int a = 0; a < IDHistory.size(); a++) {
+            
+            System.out.println(a);
+                    
+            salesHistory.addRow(new Object[]{
+                                            dateHistory.get(a),
+                                            IDHistory.get(a),
+                                            nameHistory.get(a),
+                                            quantityHistory.get(a),
+                                            salePriceHistory.get(a),
+                                            subTotalHistory.get(a),
+                                            profitHistory.get(a)
                                          });
                     
         }
@@ -215,6 +268,64 @@ public class Main_Frame extends javax.swing.JFrame {
                 }
 
             defaultInventoryTabState();
+            
+        } catch(Exception catchException) {
+            
+            System.out.println("Exception Catched!");
+            System.out.println(catchException);
+            
+        }
+        
+    }
+    
+    // Data -> ArrayList -> TxtFile - History Sales System Table
+    void InsertHistoryArrayListToTxtFileToSystem () {
+        
+        salesHistory.setRowCount(0);
+        try {
+            
+            filePath = "History.txt";
+            theResult = fileToString(filePath);
+            PrintWriter goAddPrint = new PrintWriter(new File(filePath));
+            
+            for(int a = 0; a < IDHistory.size(); a++) {
+                
+                    newText += 
+                    
+                    dateHistory.get(a)             + "," + 
+                    IDHistory.get(a)               + "," + 
+                    nameHistory.get(a)             + "," + 
+                    quantityHistory.get(a)         + "," + 
+                    originalPriceHistory.get(a)    + "," + 
+                    salePriceHistory.get(a)        + "," + 
+                    subTotalHistory.get(a)         + "," + 
+                    isVatableHistory.get(a)        + "," + 
+                    profitHistory.get(a)           + "\r\n";
+                    
+                    
+                }
+                
+                theResult = theResult.replaceAll(theResult, newText);
+
+                goAddPrint.append("");
+                goAddPrint.append(theResult);
+                goAddPrint.flush();
+
+                newText = "";
+                
+                for(int a = 0; a < dateHistory.size(); a++) {
+                    
+                    salesHistory.addRow(new Object[]{
+                                                        dateHistory.get(a),
+                                                        IDHistory.get(a),
+                                                        nameHistory.get(a),
+                                                        quantityHistory.get(a),
+                                                        salePriceHistory.get(a),
+                                                        subTotalHistory.get(a),
+                                                        profitHistory.get(a)
+                                                    });
+                    
+                }
             
         } catch(Exception catchException) {
             
@@ -285,11 +396,11 @@ public class Main_Frame extends javax.swing.JFrame {
         Main_receipt_TxtPane = new javax.swing.JTextArea();
         Tab_inventory = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
+        Inventory_itmOrigPrice_TxtField = new javax.swing.JTextField();
         Inventory_itmID_TxtField = new javax.swing.JTextField();
         jLabel30 = new javax.swing.JLabel();
         Inventory_itmName_TxtField = new javax.swing.JTextField();
         jLabel33 = new javax.swing.JLabel();
-        Inventory_itmOrigPrice_TxtField = new javax.swing.JTextField();
         jLabel35 = new javax.swing.JLabel();
         jLabel34 = new javax.swing.JLabel();
         Inventory_itmSalePrice_TxtField = new javax.swing.JTextField();
@@ -431,6 +542,11 @@ public class Main_Frame extends javax.swing.JFrame {
 
         Main_itmName_TxtField.setDisabledTextColor(new java.awt.Color(0, 0, 0));
 
+        Main_itmID_TxtField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Main_itmID_TxtFieldActionPerformed(evt);
+            }
+        });
         Main_itmID_TxtField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 Main_itmID_TxtFieldKeyReleased(evt);
@@ -942,6 +1058,12 @@ public class Main_Frame extends javax.swing.JFrame {
         jLabel14.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel14.setText("ITEM ID");
 
+        Inventory_itmOrigPrice_TxtField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                Inventory_itmOrigPrice_TxtFieldKeyPressed(evt);
+            }
+        });
+
         Inventory_itmID_TxtField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 Inventory_itmID_TxtFieldActionPerformed(evt);
@@ -965,12 +1087,6 @@ public class Main_Frame extends javax.swing.JFrame {
         jLabel33.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel33.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel33.setText("ORIGINAL PRICE");
-
-        Inventory_itmOrigPrice_TxtField.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                Inventory_itmOrigPrice_TxtFieldKeyPressed(evt);
-            }
-        });
 
         jLabel35.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel35.setText("PHP");
@@ -1610,7 +1726,7 @@ public class Main_Frame extends javax.swing.JFrame {
             int itemIDIndex = IDInventory.indexOf(Main_itmID_TxtField.getText());
             
             Main_itmName_TxtField.setText(nameInventory.get(itemIDIndex));
-            Main_itmPrice_TxtField.setText("" + originalPriceInventory.get(itemIDIndex));
+            Main_itmPrice_TxtField.setText("" + salePriceInventory.get(itemIDIndex));
             Main_availableStock_Indicator.setText("" + stockInventory.get(itemIDIndex));
             
         } else {
@@ -1674,25 +1790,28 @@ public class Main_Frame extends javax.swing.JFrame {
            !Main_itmQuantity_TxtField.getText().isEmpty()   &&
            !Main_itmQuantity_TxtField.getText().equals("0") ){
             
+                LocalDate localDate = LocalDate.now();
+            
                 // GETTING INDEX - To Use for Accessing Data From ArrayList [INVENTORY].
                 // Used For      - Inventory [Database]
                 int indexForInventoryArrayList = IDInventory.indexOf(Main_itmID_TxtField.getText());
 
                 // COMPUTATIONS
                 double  originalPriceTotal  = originalPriceInventory.get(indexForInventoryArrayList);
-                double  actualPriceTotal    = (originalPriceTotal * .50) + originalPriceTotal;
-                double  salesPriceTotal     = (actualPriceTotal * .12) + actualPriceTotal;
                 int     quantityTotal       = Integer.parseInt(Main_itmQuantity_TxtField.getText());
-                double  subTotal            = salesPriceTotal * quantityTotal;
+                double  subTotal            = salePriceInventory.get(indexForInventoryArrayList) * quantityTotal;
 
                 // SETTING VALUES - Insert To ArrayList [CART ITEM].
+                dateCartItem.add(localDate.toString());
                 IDCartItem.add(IDInventory.get(indexForInventoryArrayList));
                 nameCartItem.add(nameInventory.get(indexForInventoryArrayList));
                 quantityCartItem.add(quantityTotal);
                 originalPriceCartItem.add(originalPriceTotal);
-                salePriceCartItem.add(salesPriceTotal);
+                salePriceCartItem.add(salePriceInventory.get(indexForInventoryArrayList));
                 subTotalCartItem.add(subTotal);
                 isVatableCartItem.add(isVatableInventory.get(indexForInventoryArrayList));
+                
+                // FORMULA FOR PROFIT
                 
                 // GETTING INDEX - To Use for Accessing Data From ArrayList [CART ITEM].
                 // Used For      - Cart Item [Database]
@@ -1734,6 +1853,12 @@ public class Main_Frame extends javax.swing.JFrame {
                 
                 // COMPUTATION - Subtract yung quantity na inadd ni user sa Database.
                 
+                double cartTotal = 0;
+                for(int a = 0; a < IDCartItem.size(); a++) {
+                    cartTotal += subTotalCartItem.get(a);
+                }
+                Main_cartTotal_txt.setText("" + cartTotal);
+                
         }   
     }//GEN-LAST:event_Main_Add_BtnActionPerformed
 
@@ -1760,6 +1885,7 @@ public class Main_Frame extends javax.swing.JFrame {
             // Refresh Quantity Stock - Found At Main User Area
             Main_availableStock_Indicator.setText("" + stockInventory.get(indexForInventoryArrayList));
             
+            dateCartItem.remove(delRow);
             IDCartItem.remove(delRow);
             nameCartItem.remove(delRow);
             quantityCartItem.remove(delRow);
@@ -1812,24 +1938,91 @@ public class Main_Frame extends javax.swing.JFrame {
         double changeAmount;
         
         if(cash < amountToPay){
-            Main_InsufficientAmount_Indicator.setVisible(true);
-        }else{
             
-            // DITO YUNG CODE PAG SUFFICIENT PERA NI USER.
+            Main_InsufficientAmount_Indicator.setVisible(true); // Insufficient Amount
+            
+        }else{  // Correct Amount
             
             /*
-                Game Plan:
-                [1] History Database   - Content nung nasa CART ITEM Database (ArrayList) is
-                                         mapapasok sa HISTORY Database (ArrayList) then to txt
-                                         file (History.txt).
-                [2] Cart Item Database - Delete lahat ng laman ng CART ITEM Database (ArrayList)
-                                         para magamit sa next na process. 
-                                       - Basically, everytime na successful na ang payment, pag
-                                         nakapasok na yung laman ng CART ITEM Database (ArrayList)
-                                         doon sa HISTORY Database (ArrayList) then to txt file
-                                         (History.txt), madedelete na din entire laman ng CART ITEM 
-                                         Database.
+            
+                GAME PLAN
+                [1] Before deleting CARTITEM database, we want to use this Database (ArrayList) to print
+                    the contents of the CARTITEM database for the receipt.
+                [2] After printing the receipt (or saving/creating the txt file) we want to delete this
+                    ArrayList database (see part P123).
+            
             */
+            
+            // CREATION OF Reference Number
+            LocalDate localDate = LocalDate.now();
+            String referenceGenerated = "";
+            
+            do {
+                
+                int num1 = (int) (Math.random() * 9);
+                int num2 = (int) (Math.random() * 9);
+                int num3 = (int) (Math.random() * 9);
+                int num4 = (int) (Math.random() * 9);
+                int num5 = (int) (Math.random() * 9);
+                int num6 = (int) (Math.random() * 9);
+                int num7 = (int) (Math.random() * 9);
+                int num8 = (int) (Math.random() * 9);
+                int num9 = (int) (Math.random() * 9);
+                
+                referenceGenerated = "" + num1 + "" + num2 + "" + num3 + "" + num4 + 
+                                     "" + num5 + "" + num6 + "" + num7 + "" + num8 + "" + num9;
+                
+            } while(referenceNumbers.contains(referenceGenerated));
+            
+            referenceNumbers.add(referenceGenerated);
+            referenceNumbersDate.add(localDate.toString());
+            
+            for(int a = 0; a < dateCartItem.size(); a++) {
+                
+                dateHistory.add(dateCartItem.get(a));
+                IDHistory.add(IDCartItem.get(a));
+                nameHistory.add(nameCartItem.get(a));
+                quantityHistory.add(quantityCartItem.get(a));
+                originalPriceHistory.add(originalPriceCartItem.get(a));
+                salePriceHistory.add(salePriceCartItem.get(a));
+                subTotalHistory.add(subTotalCartItem.get(a));
+                isVatableHistory.add(isVatableCartItem.get(a));
+                
+            }
+            
+            // PROFIT FORMULA
+            double totalProfit = 0;
+            
+            for(int a = 0; a < IDCartItem.size(); a++) {
+                if(isVatableCartItem.get(a).equals("V")) {
+                    
+                    totalProfit += (salePriceCartItem.get(a) / 1.12) * quantityCartItem.get(a) -
+                                   (originalPriceCartItem.get(a) * quantityCartItem.get(a));
+                    
+                } else {
+                    
+                    totalProfit += (salePriceCartItem.get(a) * quantityCartItem.get(a)) - 
+                                   (originalPriceCartItem.get(a) * quantityCartItem.get(a));
+                    
+                }
+                
+                profitHistory.add(totalProfit);
+                totalProfit = 0;
+            }
+            
+            // Call here for refreshing SALES TAB
+            InsertHistoryArrayListToTxtFileToSystem();
+            
+            // P123
+            dateCartItem.removeAll(dateCartItem);
+            IDCartItem.removeAll(IDCartItem);
+            nameCartItem.removeAll(nameCartItem);
+            quantityCartItem.removeAll(quantityCartItem);
+            originalPriceCartItem.removeAll(originalPriceCartItem);
+            salePriceCartItem.removeAll(salePriceCartItem);
+            subTotalCartItem.removeAll(subTotalCartItem);
+            isVatableCartItem.removeAll(isVatableCartItem);
+            
             
             // DITO YUNG CODE PAG SUFFICIENT PERA NI USER.
             
@@ -2211,6 +2404,10 @@ public class Main_Frame extends javax.swing.JFrame {
     private void Main_cartViewer_TableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Main_cartViewer_TableMouseClicked
         Main_remove_Btn.setEnabled(true);
     }//GEN-LAST:event_Main_cartViewer_TableMouseClicked
+
+    private void Main_itmID_TxtFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Main_itmID_TxtFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Main_itmID_TxtFieldActionPerformed
 
 
     // - - - - - - - - - - - - OTHERS - - - - - - - - - - - - //

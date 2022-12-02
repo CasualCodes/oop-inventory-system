@@ -338,6 +338,7 @@
                     </Component>
                     <Component class="javax.swing.JTextField" name="Main_itmID_TxtField">
                       <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Main_itmID_TxtFieldActionPerformed"/>
                         <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="Main_itmID_TxtFieldKeyReleased"/>
                       </Events>
                     </Component>
@@ -1192,6 +1193,11 @@
                 <Property name="text" type="java.lang.String" value="ITEM ID"/>
               </Properties>
             </Component>
+            <Component class="javax.swing.JTextField" name="Inventory_itmOrigPrice_TxtField">
+              <Events>
+                <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="Inventory_itmOrigPrice_TxtFieldKeyPressed"/>
+              </Events>
+            </Component>
             <Component class="javax.swing.JTextField" name="Inventory_itmID_TxtField">
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Inventory_itmID_TxtFieldActionPerformed"/>
@@ -1219,11 +1225,6 @@
                 <Property name="horizontalAlignment" type="int" value="4"/>
                 <Property name="text" type="java.lang.String" value="ORIGINAL PRICE"/>
               </Properties>
-            </Component>
-            <Component class="javax.swing.JTextField" name="Inventory_itmOrigPrice_TxtField">
-              <Events>
-                <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="Inventory_itmOrigPrice_TxtFieldKeyPressed"/>
-              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel35">
               <Properties>
