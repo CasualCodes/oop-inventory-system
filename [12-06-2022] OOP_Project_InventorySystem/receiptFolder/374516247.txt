@@ -1,0 +1,25 @@
+RECEIPT#374516247
+Citi Megamalls
+2022-12-07
+-----------------------------------------
+CITI MEGAMALLS Inc. 
+VAT REG TIN 209-209-185-0050 
+CITI ROSTAM PHILIPPINES 4506 
+873 BLDG. MASTER STREET 
+CITICITY, ROSTAM (NEW ALBAY NIEVO) 
+-----------------------------------------
+
+2195  AMD Radeon  12  1030800.0  NV  
+
+2195  AMD Radeon  8   687200.0   NV  
+
+-----------------------------------------
+VATABLE : 0.0
+VAT EXEMPT : 1718000.0
+VAT : 0.0
+
+TOTAL  : 1718000.0
+CASH   : 1718000.0
+CHANGE : 0.0
+
+Thank You For Shopping At Citi Megamalls!

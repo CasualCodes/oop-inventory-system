@@ -1,0 +1,29 @@
+RECEIPT#700080750
+Citi Megamalls
+2022-12-07
+-----------------------------------------
+CITI MEGAMALLS Inc. 
+VAT REG TIN 209-209-185-0050 
+CITI ROSTAM PHILIPPINES 4506 
+873 BLDG. MASTER STREET 
+CITICITY, ROSTAM (NEW ALBAY NIEVO) 
+-----------------------------------------
+
+0001  Christmas Decor  85   76500.0    V  
+
+2195  AMD Radeon       5    429500.0  NV  
+
+8000  Jan              140  143785.6   V  
+
+9000  Christmas Tree   1    900.0     NV  
+
+-----------------------------------------
+VATABLE : 193851.328
+VAT EXEMPT : 430400.0
+VAT : 26434.272
+
+TOTAL  : 650685.6
+CASH   : 750000.0
+CHANGE : 99314.40000000002
+
+Thank You For Shopping At Citi Megamalls!
