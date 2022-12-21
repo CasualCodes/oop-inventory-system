@@ -1,0 +1,27 @@
+RECEIPT#262341408
+Citi Megamalls
+2022-12-16
+-----------------------------------------
+CITI MEGAMALLS Inc. 
+VAT REG TIN 209-209-185-0050 
+CITI ROSTAM PHILIPPINES 4506 
+873 BLDG. MASTER STREET 
+CITICITY, ROSTAM (NEW ALBAY NIEVO) 
+-----------------------------------------
+
+0103  LAPTOP  680   54,400,000.00  NV  
+
+0103  LAPTOP  2050  164,000,000.00  NV  
+
+0110  PENCIL  50    1,120.00   V  
+
+-----------------------------------------
+VATABLE : 985.60
+VAT EXEMPT : 218,400,000.00
+VAT : 134.40
+
+TOTAL  : 218,401,120.00
+CASH   : 218,401,120.00
+CHANGE : 0.00
+
+Thank You For Shopping At Citi Megamalls!

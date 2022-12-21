@@ -1,0 +1,35 @@
+RECEIPT#735806705
+Citi Megamalls
+2022-12-08
+-----------------------------------------
+CITI MEGAMALLS Inc. 
+VAT REG TIN 209-209-185-0050 
+CITI ROSTAM PHILIPPINES 4506 
+873 BLDG. MASTER STREET 
+CITICITY, ROSTAM (NEW ALBAY NIEVO) 
+-----------------------------------------
+
+0002  Ballpen        2   40.00  NV  
+
+0003  Eraser         2   400.00  NV  
+
+0001  Mongol Pencil  4   448.00   V  
+
+0002  Ballpen        5   100.00  NV  
+
+0004  Sharpener      10  896.00   V  
+
+0002  Ballpen        1   20.00  NV  
+
+0001  Mongol Pencil  2   224.00   V  
+
+-----------------------------------------
+VATABLE : 1,379.84
+VAT EXEMPT : 560.00
+VAT : 188.16
+
+TOTAL  : 2,128.00
+CASH   : 121,312.00
+CHANGE : 119,184.00
+
+Thank You For Shopping At Citi Megamalls!

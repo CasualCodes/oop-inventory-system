@@ -1,0 +1,23 @@
+RECEIPT#435142551
+Citi Megamalls
+2022-12-08
+-----------------------------------------
+CITI MEGAMALLS Inc. 
+VAT REG TIN 209-209-185-0050 
+CITI ROSTAM PHILIPPINES 4506 
+873 BLDG. MASTER STREET 
+CITICITY, ROSTAM (NEW ALBAY NIEVO) 
+-----------------------------------------
+
+001  BALLPEN  2  134.40   V  
+
+-----------------------------------------
+VATABLE : 118.27
+VAT EXEMPT : 0.00
+VAT : 16.13
+
+TOTAL  : 134.40
+CASH   : 1,090.00
+CHANGE : 955.60
+
+Thank You For Shopping At Citi Megamalls!

@@ -1,0 +1,25 @@
+RECEIPT#513681065
+Citi Megamalls
+2022-12-09
+-----------------------------------------
+CITI MEGAMALLS Inc. 
+VAT REG TIN 209-209-185-0050 
+CITI ROSTAM PHILIPPINES 4506 
+873 BLDG. MASTER STREET 
+CITICITY, ROSTAM (NEW ALBAY NIEVO) 
+-----------------------------------------
+
+0200  LAPTOP           2   160,000.00  NV  
+
+0220  GAMING KEYBOARD  12  66,000.00  NV  
+
+-----------------------------------------
+VATABLE : 0.00
+VAT EXEMPT : 226,000.00
+VAT : 0.00
+
+TOTAL  : 226,000.00
+CASH   : 226,000.00
+CHANGE : 0.00
+
+Thank You For Shopping At Citi Megamalls!

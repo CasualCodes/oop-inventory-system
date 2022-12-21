@@ -1,0 +1,29 @@
+RECEIPT#065630573
+Citi Megamalls
+2022-12-09
+-----------------------------------------
+CITI MEGAMALLS Inc. 
+VAT REG TIN 209-209-185-0050 
+CITI ROSTAM PHILIPPINES 4506 
+873 BLDG. MASTER STREET 
+CITICITY, ROSTAM (NEW ALBAY NIEVO) 
+-----------------------------------------
+
+0300  BALLPEN-EDITED   2    120.00    NV  
+
+0300  BALLPEN-EDITED   123  7,380.00  NV  
+
+0300  BALLPEN-EDITED   2    120.00    NV  
+
+0220  GAMING KEYBOARD  32   176,000.00  NV  
+
+-----------------------------------------
+VATABLE : 0.00
+VAT EXEMPT : 183,620.00
+VAT : 0.00
+
+TOTAL  : 183,620.00
+CASH   : 200,000.00
+CHANGE : 16,380.00
+
+Thank You For Shopping At Citi Megamalls!
